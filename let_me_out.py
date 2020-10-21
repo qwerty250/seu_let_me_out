@@ -45,6 +45,18 @@ def find_element_by_css_selector_keyword(drv, css_selector, keyword):
 
 
 try:
+    # 计算离校和返校时间
+    # 不指定参数，当天出校
+    print('%d arguments received' % len(sys.argv))
+    if len(sys.argv) < 2:
+        leave_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+        back_time = time.strftime("%Y-%m-%d 21:30:00", time.localtime())
+        print('leave: %s \t back: %s' % (leave_time, back_time))
+    else:   # 指定参数，按照参数进行
+        leave_time = sys.argv[1] + " 06:00:00"
+        back_time = sys.argv[1] + " 21:30:00"
+        print('leave: %s \t back: %s' % (leave_time, back_time))
+
     browser.maximize_window()
     browser.get('http://ehall.seu.edu.cn/xsfw/sys/xsqjapp/*default/index.do')
 
@@ -141,10 +153,6 @@ try:
     time.sleep(1)
     find_element_by_css_selector_keyword(browser, "[class='jqx-listitem-state-normal jqx-item jqx-rc-all']",
                                          "因私").click()
-
-    # 计算离校和返校时间
-    leave_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-    back_time = time.strftime("%Y-%m-%d 21:30:00", time.localtime())
 
     leave_field = find_element_by_data_caption(browser, "bhtc-input-group", "请假开始日期").find_element_by_tag_name("input")
     browser.execute_script("arguments[0].scrollIntoView();", leave_field)
